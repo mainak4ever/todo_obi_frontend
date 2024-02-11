@@ -1,8 +1,9 @@
 import axios from "axios";
+import conf from "../conf/conf";
 // import conf from "../conf/conf";
 
-const BASE_URL = `/api/v1`;
-
+// const BASE_URL = `/api/v1`;
+const BASE_URL = conf.baseUrl + "/api/v1";
 export const addTodo = async (todoData) => {
   try {
     const response = await axios.post(`${BASE_URL}/todos`, todoData, {
