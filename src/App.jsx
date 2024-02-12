@@ -2,18 +2,18 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import { Outlet } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login, logout } from "./store/authSlice";
 import { getUser } from "./fetchApi/userApi";
 
 function App() {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-
+  const token = useSelector((state) => state.auth.accessToken);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getUser();
+        const response = await getUser(token);
         // console.log(response);
         // const userData = response.data;
 
