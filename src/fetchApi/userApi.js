@@ -26,10 +26,13 @@ export const loginUser = async (userData) => {
   }
 };
 
-export const logoutUser = async () => {
+export const logoutUser = async (token) => {
   try {
     const response = await axios.post(`${BASE_URL}/users/logout`, null, {
       withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   } catch (error) {
@@ -37,10 +40,13 @@ export const logoutUser = async () => {
   }
 };
 
-export const getUser = async () => {
+export const getUser = async (token) => {
   try {
     const response = await axios.get(`${BASE_URL}/users/user`, {
       withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   } catch (error) {

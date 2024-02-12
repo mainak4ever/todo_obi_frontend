@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { deleteTodo, getTodo, updateTodo } from "../fetchApi/todoApi";
+import { useSelector } from "react-redux";
 
 const GetTodo = () => {
   const { todoId } = useParams();
   const [todo, setTodo] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const token = useSelector((state) => state.auth.accessToken);
 
   useEffect(() => {
     const fetchTodo = async () => {
       try {
-        const response = await getTodo(todoId);
+        const response = await getTodo(todoId, token);
         // console.log(response);
         setTodo(response.data);
         setLoading(false);
@@ -29,7 +31,7 @@ const GetTodo = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await deleteTodo(todoId);
+      const response = await deleteTodo(todoId, token);
       // console.log(response);
       if (response.success) {
         navigate("/");
@@ -40,9 +42,13 @@ const GetTodo = () => {
   };
   const toggleCompleted = async () => {
     try {
-      const response = await updateTodo(todoId, {
-        completed: !todo.completed,
-      });
+      const response = await updateTodo(
+        todoId,
+        {
+          completed: !todo.completed,
+        },
+        token
+      );
       if (response.success) {
         setTodo((prevTodo) => ({
           ...prevTodo,

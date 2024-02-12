@@ -15,7 +15,14 @@ function App() {
       try {
         const response = await getUser();
         // console.log(response);
-        const userData = response.data;
+        // const userData = response.data;
+
+        const userData = {};
+        userData.name = response.data.user.name;
+        userData.email = response.data.user.email;
+        userData.accessToken = response.data.accessToken;
+        userData.refreshToken = response.data.refreshToken;
+
         console.log(userData);
         dispatch(login({ userData }));
       } catch (error) {

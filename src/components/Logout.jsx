@@ -1,13 +1,13 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/authSlice";
 import { logoutUser } from "../fetchApi/userApi";
 
 function LogoutBtn() {
   const dispatch = useDispatch();
-
+  const token = useSelector((state) => state.auth.accessToken);
   const logoutHandler = async () => {
     try {
-      const response = await logoutUser();
+      const response = await logoutUser(token);
       // console.log(response);
 
       dispatch(logout());

@@ -2,16 +2,18 @@ import React, { useState, useEffect } from "react";
 import TodoItem from "./TodoItem";
 import { getTodosByUser, deleteTodo, updateTodo } from "../fetchApi/todoApi";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const [todos, setTodos] = useState([]);
   const [filter, setFilter] = useState("all"); // Default filter to show all todos
   const [sort, setSort] = useState("titleAsc"); // Default sorting by title ascending
   const navigate = useNavigate();
+  const token = useSelector((state) => state.auth.accessToken);
 
   const handleDelete = async (id) => {
     try {
-      const response = await deleteTodo(id);
+      const response = await deleteTodo(id, token);
       // console.log(response);
       if (response.success) {
         setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== id));
@@ -24,7 +26,7 @@ const Home = () => {
   useEffect(() => {
     const fetchTodos = async () => {
       try {
-        const response = await getTodosByUser();
+        const response = await getTodosByUser(token);
         // console.log(response);
         setTodos(response.data);
       } catch (error) {
@@ -42,9 +44,13 @@ const Home = () => {
 
   const toggleCompleted = async (todo) => {
     try {
-      const response = await updateTodo(todo._id, {
-        completed: !todo.completed,
-      });
+      const response = await updateTodo(
+        todo._id,
+        {
+          completed: !todo.completed,
+        },
+        token
+      );
       // console.log(response);
       if (response.success) {
         setTodos((prevTodos) =>

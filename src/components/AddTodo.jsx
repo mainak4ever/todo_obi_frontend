@@ -4,16 +4,18 @@ import Input from "./Input";
 import Button from "./Button";
 import { addTodo } from "../fetchApi/todoApi";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function AddTodo() {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const token = useSelector((state) => state.auth.accessToken);
 
   const create = async (data) => {
     setError("");
     try {
-      const response = await addTodo(data);
+      const response = await addTodo(data, token);
       //   console.log(response);
       if (response.data.success) {
         console.log("success");

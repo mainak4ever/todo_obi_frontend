@@ -4,6 +4,7 @@ import Input from "./Input";
 import Button from "./Button";
 import { getTodo, updateTodo } from "../fetchApi/todoApi";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function UpdateTodo() {
   const { todoId } = useParams();
@@ -11,11 +12,11 @@ function UpdateTodo() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
+  const token = useSelector((state) => state.auth.accessToken);
   useEffect(() => {
     const fetchTodo = async () => {
       try {
-        const response = await getTodo(todoId);
+        const response = await getTodo(todoId, token);
         // console.log(response);
         const todoData = response.data;
         setValue("title", todoData.title);
@@ -33,7 +34,7 @@ function UpdateTodo() {
   const update = async (data) => {
     setError("");
     try {
-      const response = await updateTodo(todoId, data);
+      const response = await updateTodo(todoId, data, token);
       console.log(response);
       if (response.success) {
         console.log("success");
